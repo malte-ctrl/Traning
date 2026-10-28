@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0B0E13">
+<title>Överkropp</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230B0E13'/><rect x='28' y='78' width='124' height='24' rx='12' fill='%23FF7A45'/><rect x='18' y='62' width='26' height='56' rx='10' fill='%23E6EDF3'/><rect x='136' y='62' width='26' height='56' rx='10' fill='%23E6EDF3'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230B0E13'/><rect x='14' y='42' width='72' height='14' rx='7' fill='%23FF7A45'/><rect x='8' y='33' width='15' height='32' rx='6' fill='%23E6EDF3'/><rect x='77' y='33' width='15' height='32' rx='6' fill='%23E6EDF3'/></svg>">
+<style>
+:root{color-scheme:dark;
+ --bg:#0B0E13;--bg2:#10151C;--card:#151B24;--card2:#1A2129;--line:#232B36;--line2:#2E3845;
+ --tx:#E8EEF5;--mut:#8A95A3;--dim:#5B6675;
+ --acc:#FF7A45;--accd:#C85A2E;--acc-soft:rgba(255,122,69,.13);
+ --ok:#3FD47E;--ok-soft:rgba(63,212,126,.13);--warn:#E8B339;--warn-soft:rgba(232,179,57,.13);--r:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Helvetica,Arial,sans-serif;
+ font-feature-settings:"tnum" 1;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+header{background:linear-gradient(180deg,#121823,var(--bg));padding:max(16px,env(safe-area-inset-top)) 18px 0;position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+h1{margin:0;font-size:19px;font-weight:650;letter-spacing:-.025em}
+.sub{color:var(--dim);font-size:12px;font-weight:500}
+nav{display:flex;gap:4px;margin-top:14px}
+nav button{flex:1;background:none;border:0;color:var(--dim);padding:9px 2px 11px;font:inherit;font-size:13px;font-weight:550;cursor:pointer;position:relative;transition:color .15s;letter-spacing:-.01em}
+nav button.on{color:var(--tx)}
+nav button.on::after{content:"";position:absolute;left:14%;right:14%;bottom:0;height:2.5px;background:var(--acc);border-radius:3px 3px 0 0}
+main{padding:16px 18px 90px;max-width:760px;margin:0 auto}
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 18px 14px;margin:0 -18px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:9px 13px;cursor:pointer;color:var(--mut);text-align:left;font:inherit;transition:.15s;min-width:104px}
+.chip b{display:block;font-size:11px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.chip span{display:block;font-size:13.5px;font-weight:550;margin-top:2px;letter-spacing:-.01em;white-space:nowrap}
+.chip.on{background:var(--acc-soft);border-color:var(--acc);color:var(--tx)}
+.chip.on b{color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.h2{font-size:17px;font-weight:650;letter-spacing:-.02em;margin:0}
+.hs{color:var(--mut);font-size:13px;margin:4px 0 0;line-height:1.45}
+.sect{font-size:11px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:22px 0 9px;padding:0 2px}
+
+.ex{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px 11px;margin-bottom:10px;transition:border-color .25s}
+.ex.done{border-color:rgba(63,212,126,.5)}
+.ex-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:11px}
+.ex-n{font-size:15px;font-weight:600;letter-spacing:-.015em;line-height:1.25}
+.ex-m{color:var(--dim);font-size:11.5px;margin-top:3px}
+.ex-s{flex:0 0 auto;background:var(--card2);border-radius:8px;padding:3px 8px;font-size:11px;font-weight:650;color:var(--mut)}
+.ex.done .ex-s{background:var(--ok-soft);color:var(--ok)}
+.hd{display:grid;grid-template-columns:26px 1fr 1fr 22px;gap:7px;padding:0 0 5px;font-size:9.5px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.hd span:nth-child(2),.hd span:nth-child(3){text-align:center}
+.st{display:grid;grid-template-columns:26px 1fr 1fr 22px;gap:7px;align-items:center;margin-bottom:6px}
+.st-n{width:26px;height:30px;border-radius:8px;background:var(--bg2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:650;color:var(--dim)}
+.st.ok .st-n{background:var(--ok-soft);border-color:rgba(63,212,126,.35);color:var(--ok)}
+.st input{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:7px 8px;color:var(--tx);font:inherit;font-size:16px;font-weight:600;text-align:center;letter-spacing:-.01em;transition:.15s}
+.st input:focus{outline:0;border-color:var(--acc);background:#131A22}
+.st input::placeholder{color:#39424F;font-weight:500}
+.st.ok input{border-color:rgba(63,212,126,.28)}
+.tick{width:22px;text-align:center;font-size:13px;color:var(--dim)}
+.st.ok .tick{color:var(--ok)}
+.ex-f{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);font-size:12px;color:var(--dim);font-weight:550}
+.ex-f b{color:var(--tx);font-weight:650}
+.ex.done .ex-f b.flag{color:var(--ok)}
+
+.sum{background:linear-gradient(135deg,#171F2A,#141A22);border:1px solid var(--line2);border-radius:var(--r);padding:16px;margin:14px 0 12px}
+.sum .l{font-size:10.5px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.sum .v{font-size:31px;font-weight:700;letter-spacing:-.035em;margin:3px 0 0;line-height:1}
+.sum .d{font-size:12.5px;color:var(--mut);margin-top:6px}
+.sum .d b.up{color:var(--ok)}.sum .d b.dn{color:var(--warn)}
+.btn{background:var(--acc);color:#140B06;border:0;padding:14px 20px;border-radius:13px;font:inherit;font-size:15px;font-weight:650;cursor:pointer;transition:.12s;flex:1}
+.btn:active{transform:scale(.985);filter:brightness(.93)}
+.btn.g{background:var(--card2);color:var(--tx);border:1px solid var(--line2);flex:0 0 auto;padding:14px 17px}
+.btn.d{background:none;color:#E5534B;border:1px solid rgba(229,83,75,.35)}
+.row{display:flex;gap:9px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:10px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);padding:0 4px 9px;border-bottom:1px solid var(--line)}
+td{padding:11px 4px;border-bottom:1px solid var(--line);font-size:14px}
+tr:last-child td{border-bottom:0}
+.pct{font-size:12px;font-weight:650;padding:3px 8px;border-radius:7px;white-space:nowrap}
+.pct.u{background:var(--ok-soft);color:var(--ok)}.pct.n{background:var(--card2);color:var(--mut)}.pct.d{background:var(--warn-soft);color:var(--warn)}
+.si{width:50px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:8px 4px;color:var(--tx);font:inherit;font-size:14px;font-weight:600;text-align:center}
+.si:focus{outline:0;border-color:var(--acc)}
+.ti{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:8px 10px;color:var(--tx);font:inherit;font-size:13.5px}
+.ti:focus{outline:0;border-color:var(--acc)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi .l{font-size:10.5px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.kpi .v{font-size:25px;font-weight:700;letter-spacing:-.03em;margin-top:3px;line-height:1.1}
+.vol{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.vol:last-child{border:0}
+.vol-n{flex:0 0 86px;font-size:13.5px;font-weight:550}
+.vol-b{flex:1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.vol-b i{display:block;height:100%;background:linear-gradient(90deg,var(--accd),var(--acc));border-radius:4px}
+.vol-v{flex:0 0 54px;text-align:right;font-size:13px;font-weight:650;color:var(--mut)}
+.empty{text-align:center;padding:46px 18px;color:var(--mut)}
+.empty .ic{width:46px;height:46px;margin:0 auto 14px;border-radius:14px;background:var(--card2);display:flex;align-items:center;justify-content:center}
+.empty h3{margin:0 0 5px;font-size:16px;font-weight:650;color:var(--tx)}
+.empty p{margin:0;font-size:13.5px}
+.note{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 13px;font-size:12.5px;color:var(--mut);line-height:1.5;margin-top:12px}
+.note b{color:var(--tx);font-weight:600}
+.warnbox{background:var(--warn-soft);border:1px solid rgba(232,179,57,.3);color:var(--warn);padding:12px 13px;border-radius:12px;font-size:13px;margin-bottom:13px}
+#toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(90px);background:#E8EEF5;color:#0B0E13;padding:12px 20px;border-radius:14px;font-size:13.5px;font-weight:600;transition:transform .28s cubic-bezier(.3,1.3,.6,1);pointer-events:none;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#toast.show{transform:translateX(-50%) translateY(0)}
+svg.spk{display:block;width:72px;height:24px}
+.x{background:none;border:0;color:var(--dim);font-size:17px;cursor:pointer;padding:4px 7px}
+@media(min-width:620px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="brand"><h1>Överkropp</h1><div class="sub" id="sub">—</div></div>
+<nav><button data-v="train" class="on">Träna</button><button data-v="prog">Progression</button><button data-v="cfg">Program</button><button data-v="data">Data</button></nav></header>
+<main id="app"></main><div id="toast"></div>
+<script>
+"use strict";
+var KEY="overkropp5_v1";
+var PROGRAM=[
+ {id:"d1",namn:"Bröst & rygg",kort:"Bröst/rygg",ex:[
+  {id:"brostpress",namn:"Bröstpress",mus:"Bröst",set:4,lo:6,hi:10},
+  {id:"lut_hantel",namn:"Lutande bänkpress, hantlar",mus:"Bröst",set:3,lo:8,hi:12},
+  {id:"cable_flyes",namn:"Cable flyes",mus:"Bröst",set:3,lo:10,hi:15},
+  {id:"pullups",namn:"Assisted pullups",mus:"Rygg",set:4,lo:6,hi:10},
+  {id:"iso_row",namn:"Iso-Lateral Row",mus:"Rygg",set:3,lo:8,hi:12},
+  {id:"nedre_rygg",namn:"Nedre rygg",mus:"Nedre rygg",set:3,lo:10,hi:15}]},
+ {id:"d2",namn:"Axlar & triceps",kort:"Axlar/tri",ex:[
+  {id:"sidolyft",namn:"Sidolyft, hantlar",mus:"Axlar",set:4,lo:12,hi:15},
+  {id:"axelpress",namn:"Axelpress, hantlar",mus:"Axlar",set:4,lo:6,hi:10},
+  {id:"face_pull",namn:"Face pulls",mus:"Axlar",set:3,lo:15,hi:20},
+  {id:"pushdown",namn:"Triceps pushdown, rep",mus:"Triceps",set:3,lo:10,hi:15},
+  {id:"overhead_tri",namn:"Overhead triceps",mus:"Triceps",set:3,lo:10,hi:15}]},
+ {id:"d3",namn:"Rygg & biceps",kort:"Rygg/bi",ex:[
+  {id:"pullups",namn:"Assisted pullups",mus:"Rygg",set:4,lo:6,hi:10},
+  {id:"iso_row",namn:"Iso-Lateral Row",mus:"Rygg",set:4,lo:8,hi:12},
+  {id:"nedre_rygg",namn:"Nedre rygg",mus:"Nedre rygg",set:3,lo:10,hi:15},
+  {id:"curl",namn:"Bicepscurl, hantlar",mus:"Biceps",set:3,lo:8,hi:12},
+  {id:"hammer",namn:"Hammercurl",mus:"Biceps",set:2,lo:10,hi:15},
+  {id:"btb_curl",namn:"Behind the back curl",mus:"Biceps",set:2,lo:10,hi:15}]},
+ {id:"d4",namn:"Bröst & axlar",kort:"Bröst/axlar",ex:[
+  {id:"brostpress",namn:"Bröstpress",mus:"Bröst",set:4,lo:6,hi:10},
+  {id:"lut_hantel",namn:"Lutande bänkpress, hantlar",mus:"Bröst",set:3,lo:8,hi:12},
+  {id:"cable_flyes",namn:"Cable flyes",mus:"Bröst",set:2,lo:10,hi:15},
+  {id:"sidolyft",namn:"Sidolyft, hantlar",mus:"Axlar",set:3,lo:12,hi:15},
+  {id:"axelpress",namn:"Axelpress, hantlar",mus:"Axlar",set:3,lo:6,hi:10},
+  {id:"face_pull",namn:"Face pulls",mus:"Axlar",set:2,lo:15,hi:20}]},
+ {id:"d5",namn:"Armar & traps",kort:"Armar",ex:[
+  {id:"curl",namn:"Bicepscurl, hantlar",mus:"Biceps",set:3,lo:8,hi:12},
+  {id:"hammer",namn:"Hammercurl",mus:"Biceps",set:2,lo:10,hi:15},
+  {id:"btb_curl",namn:"Behind the back curl",mus:"Biceps",set:2,lo:10,hi:15},
+  {id:"pushdown",namn:"Triceps pushdown, rep",mus:"Triceps",set:3,lo:10,hi:15},
+  {id:"overhead_tri",namn:"Overhead triceps",mus:"Triceps",set:2,lo:10,hi:15},
+  {id:"shrugs",namn:"Shrugs",mus:"Traps",set:3,lo:10,hi:15}]}];
+
+var db={pass:[],cfg:{},namn:{}},canSave=true;
+try{var raw=localStorage.getItem(KEY);if(raw)db=JSON.parse(raw);}catch(e){canSave=false;}
+if(!db.pass)db.pass=[];if(!db.cfg)db.cfg={};if(!db.namn)db.namn={};
+db.pass.forEach(function(p){Object.keys(p.ex||{}).forEach(function(k){var o=p.ex[k];
+ if(o&&!o.sets&&o.kg!=null&&o.reps!=null)p.ex[k]={sets:[{kg:o.kg,reps:o.reps}],gammal:true};});});
+function save(){if(!canSave)return;try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){canSave=false;}}
+function toast(t){var e=document.getElementById("toast");e.textContent=t;e.className="show";clearTimeout(e._t);e._t=setTimeout(function(){e.className="";},1800);}
+function nf(n,d){return(n==null||isNaN(n))?"—":Number(n).toFixed(d==null?1:d).replace(".",",").replace(/,0$/,"");}
+function kf(n){return Math.round(n).toLocaleString("sv-SE");}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function dag(i){return PROGRAM.filter(function(x){return x.id===i;})[0];}
+function dagCfg(d,e){var k=d+"."+e,c=db.cfg[k];if(c)return c;
+ var x=dag(d).ex.filter(function(y){return y.id===e;})[0];return{set:x.set,lo:x.lo,hi:x.hi};}
+function nm(i,f){return db.namn[i]||f;}
+function vol(o){if(!o||!o.sets)return 0;
+ return o.sets.reduce(function(a,s){return a+((s&&s.kg!=null&&s.reps!=null)?s.kg*s.reps:0);},0);}
+function antalSet(o){if(!o||!o.sets)return 0;
+ return o.sets.filter(function(s){return s&&s.kg!=null&&s.reps!=null;}).length;}
+function passAv(d){return db.pass.filter(function(p){return p.dag===d;}).sort(function(a,b){return a.datum<b.datum?-1:1;});}
+function senaste(d){var a=passAv(d);return a.length?a[a.length-1]:null;}
+function allaFor(i){var o=[];db.pass.forEach(function(p){if(p.ex&&p.ex[i]&&vol(p.ex[i])>0)o.push({datum:p.datum,v:vol(p.ex[i])});});
+ return o.sort(function(a,b){return a.datum<b.datum?-1:1;});}
+function klarOvn(exid,o,c){if(!o||!o.sets)return false;
+ var n=0;for(var i=0;i<c.set;i++){var s=o.sets[i];if(s&&s.reps!=null&&s.reps>=c.hi)n++;}
+ return n===c.set;}
+
+var view="train",vald="d1",ut={};
+(function(){var s=db.pass.slice().sort(function(a,b){return a.datum<b.datum?-1:1;}).pop();
+ if(s){var i=PROGRAM.map(function(d){return d.id;}).indexOf(s.dag);vald=PROGRAM[(i+1)%5].id;}})();
+function U(id,n){if(!ut[id])ut[id]={sets:[]};while(ut[id].sets.length<n)ut[id].sets.push({});return ut[id];}
+
+function render(){
+ document.getElementById("sub").textContent=db.pass.length?(db.pass.length+" pass loggade"):"5 dagar · 2× frekvens";
+ var h=canSave?"":'<div class="warnbox"><b>Sparning fungerar inte här.</b> Öppna i Safari i stället för Chrome.</div>';
+ document.getElementById("app").innerHTML=h+({train:vTrain,prog:vProg,cfg:vCfg,data:vData}[view])();
+ bind();
+}
+function chips(){return '<div class="days">'+PROGRAM.map(function(d,i){
+ return '<button class="chip'+(d.id===vald?" on":"")+'" data-dag="'+d.id+'"><b>Dag '+(i+1)+'</b><span>'+d.kort+'</span></button>';}).join("")+'</div>';}
+
+function vTrain(){
+ var d=dag(vald),prev=senaste(vald),s=chips(),tot=0,ptot=0,klara=0;
+ var body=d.ex.map(function(e){
+  var c=dagCfg(d.id,e.id),o=U(e.id,c.set),p=prev&&prev.ex?prev.ex[e.id]:null;
+  tot+=vol(o); if(p)ptot+=vol(p);
+  var done=klarOvn(e.id,o,c); if(done)klara++;
+  var ref="ingen historik";
+  if(p&&p.sets&&p.sets.length){
+   var kgs=p.sets.map(function(x){return x&&x.kg!=null?x.kg:null;}).filter(function(x){return x!=null;});
+   var sam=kgs.length&&kgs.every(function(x){return x===kgs[0];});
+   ref="förra "+(sam?nf(kgs[0])+" kg × "+p.sets.map(function(x){return x&&x.reps!=null?x.reps:"–";}).join(", ")
+    :p.sets.map(function(x){return x&&x.kg!=null?nf(x.kg)+"×"+x.reps:"–";}).join("  "));}
+  var rader="";
+  for(var i=0;i<c.set;i++){
+   var st=o.sets[i]||{},pst=(p&&p.sets)?p.sets[i]:null;
+   var ok=st.reps!=null&&st.reps>=c.hi;
+   rader+='<div class="st'+(ok?" ok":"")+'" data-strow="'+e.id+'|'+i+'">'+
+    '<div class="st-n">'+(i+1)+'</div>'+
+    '<input type="number" step="0.5" inputmode="decimal" data-ex="'+e.id+'" data-i="'+i+'" data-f="kg" value="'+(st.kg!=null?st.kg:"")+'" placeholder="'+(pst&&pst.kg!=null?nf(pst.kg):"kg")+'">'+
+    '<input type="number" inputmode="numeric" data-ex="'+e.id+'" data-i="'+i+'" data-f="reps" value="'+(st.reps!=null?st.reps:"")+'" placeholder="'+(pst&&pst.reps!=null?pst.reps:"rep")+'">'+
+    '<div class="tick">'+(ok?"✓":"")+'</div></div>';}
+  return '<div class="ex'+(done?" done":"")+'" data-card="'+e.id+'">'+
+   '<div class="ex-top"><div><div class="ex-n">'+esc(nm(e.id,e.namn))+'</div><div class="ex-m">'+c.lo+'–'+c.hi+' rep · '+ref+'</div></div>'+
+   '<div class="ex-s">'+c.set+' SET</div></div>'+
+   '<div class="hd"><span></span><span>Vikt</span><span>Reps</span><span></span></div>'+rader+
+   '<div class="ex-f"><span>Volym <b class="v">'+kf(vol(o))+'</b> kg</span><b class="flag">'+(done?"Höj vikten":antalSet(o)+"/"+c.set+" set")+'</b></div></div>';}).join("");
+ var dl=ptot?(tot/ptot-1)*100:null;
+ s+='<div class="sum"><div class="l">'+esc(d.namn)+'</div><div class="v">'+kf(tot)+' kg</div><div class="d">'+
+   (ptot?'förra gången '+kf(ptot)+' kg · <b class="'+(tot>=ptot?"up":"dn")+'">'+(tot>=ptot?"+":"")+nf(dl,1)+' %</b>':'första passet av den här typen')+
+   ' · '+klara+'/'+d.ex.length+' klara</div></div>'+body;
+ s+='<div class="row" style="margin-top:14px"><button class="btn" id="spara">Spara passet</button><button class="btn g" id="rensa">Rensa</button></div>';
+ var hist=passAv(vald);
+ if(hist.length){
+  s+='<div class="sect">Tidigare · '+esc(d.namn)+'</div><div class="card"><table>';
+  hist.slice().reverse().slice(0,8).forEach(function(p){var v=0;d.ex.forEach(function(e){v+=vol(p.ex[e.id]);});
+   s+='<tr><td style="color:var(--mut)">'+p.datum+'</td><td style="text-align:right;font-weight:650">'+kf(v)+' kg</td>'+
+      '<td style="width:34px;text-align:right"><button class="x" data-del="'+p.datum+'|'+p.dag+'">✕</button></td></tr>';});
+  s+='</table></div>';}
+ return s;
+}
+function omrakna(){
+ var d=dag(vald),prev=senaste(vald),tot=0,ptot=0,k=0;
+ d.ex.forEach(function(e){
+  var c=dagCfg(d.id,e.id),o=U(e.id,c.set),v=vol(o);tot+=v;if(prev&&prev.ex)ptot+=vol(prev.ex[e.id]);
+  var done=klarOvn(e.id,o,c);if(done)k++;
+  var card=document.querySelector('[data-card="'+e.id+'"]');
+  if(card){card.classList.toggle("done",done);
+   card.querySelector(".ex-f .v").textContent=kf(v);
+   card.querySelector(".ex-f .flag").textContent=done?"Höj vikten":antalSet(o)+"/"+c.set+" set";
+   for(var i=0;i<c.set;i++){var st=o.sets[i]||{},row=card.querySelector('[data-strow="'+e.id+'|'+i+'"]');
+    if(row){var ok=st.reps!=null&&st.reps>=c.hi;row.classList.toggle("ok",ok);row.querySelector(".tick").textContent=ok?"✓":"";}}}});
+ var sum=document.querySelector(".sum");
+ if(sum){sum.querySelector(".v").textContent=kf(tot)+" kg";
+  var dl=ptot?(tot/ptot-1)*100:null;
+  sum.querySelector(".d").innerHTML=(ptot?'förra gången '+kf(ptot)+' kg · <b class="'+(tot>=ptot?"up":"dn")+'">'+(tot>=ptot?"+":"")+nf(dl,1)+' %</b>':'första passet av den här typen')+' · '+k+'/'+d.ex.length+' klara';}
+}
+function vProg(){
+ var seen={},ids=[];PROGRAM.forEach(function(d){d.ex.forEach(function(e){if(!seen[e.id]){seen[e.id]=e;ids.push(e.id);}});});
+ var rows=ids.map(function(i){return{id:i,n:nm(i,seen[i].namn),m:seen[i].mus,a:allaFor(i)};}).filter(function(r){return r.a.length;});
+ var s="";
+ if(rows.length){
+  var tv=0;db.pass.forEach(function(p){Object.keys(p.ex).forEach(function(k){tv+=vol(p.ex[k]);});});
+  var best=rows.map(function(r){var v=r.a.map(function(x){return x.v;});return{u:(Math.max.apply(null,v)/v[0]-1)*100};}).sort(function(a,b){return b.u-a.u;})[0];
+  s+='<div class="grid"><div class="kpi"><div class="l">Pass</div><div class="v">'+db.pass.length+'</div></div>'+
+     '<div class="kpi"><div class="l">Total volym</div><div class="v">'+kf(tv/1000)+'<span style="font-size:14px;color:var(--mut)"> ton</span></div></div>'+
+     '<div class="kpi"><div class="l">Övningar</div><div class="v">'+rows.length+'</div></div>'+
+     '<div class="kpi"><div class="l">Bäst utv.</div><div class="v" style="color:var(--ok)">+'+nf(best.u,0)+'%</div></div></div>';
+  s+='<div class="sect">Per övning</div><div class="card"><table><tr><th>Övning</th><th style="text-align:right">Första</th><th style="text-align:right">Bästa</th><th style="text-align:right">Utv</th><th></th></tr>';
+  rows.forEach(function(r){var v=r.a.map(function(x){return x.v;}),f=v[0],b=Math.max.apply(null,v),u=(b/f-1)*100;
+   s+='<tr><td><div style="font-weight:600">'+esc(r.n)+'</div><div style="color:var(--dim);font-size:11.5px;margin-top:2px">'+r.m+' · '+r.a.length+' pass</div></td>'+
+      '<td style="text-align:right;color:var(--mut)">'+kf(f)+'</td><td style="text-align:right;font-weight:650">'+kf(b)+'</td>'+
+      '<td style="text-align:right"><span class="pct '+(u>.5?"u":(u<-.5?"d":"n"))+'">'+(u>0?"+":"")+nf(u,0)+'%</span></td><td style="width:76px">'+spk(v)+'</td></tr>';});
+  s+='</table></div>';
+ } else s+='<div class="empty"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A95A3" stroke-width="2" stroke-linecap="round"><path d="M3 17l6-6 4 4 7-7"/></svg></div><h3>Ingen historik än</h3><p>Logga ditt första pass så dyker kurvorna upp.</p></div>';
+ var mv={},mx=0;PROGRAM.forEach(function(d){d.ex.forEach(function(e){var c=dagCfg(d.id,e.id);mv[e.mus]=(mv[e.mus]||0)+c.set;});});
+ Object.keys(mv).forEach(function(k){if(mv[k]>mx)mx=mv[k];});
+ s+='<div class="sect">Veckovolym</div><div class="card">';
+ Object.keys(mv).sort(function(a,b){return mv[b]-mv[a];}).forEach(function(m){
+  s+='<div class="vol"><div class="vol-n">'+m+'</div><div class="vol-b"><i style="width:'+(mv[m]/mx*100)+'%"></i></div><div class="vol-v">'+mv[m]+' set</div></div>';});
+ var t=0;Object.keys(mv).forEach(function(k){t+=mv[k];});
+ return s+'</div><div class="note"><b>'+t+' set i veckan</b> om du kör alla fem dagarna. Allt utom traps tränas två gånger.</div>';
+}
+function spk(v){if(v.length<2)return'<span style="color:var(--dim);font-size:11px">—</span>';
+ var w=72,h=24,p=3,mn=Math.min.apply(null,v),mx=Math.max.apply(null,v);if(mx-mn<1){mn-=1;mx+=1;}
+ var pt=v.map(function(x,i){return[p+i*(w-2*p)/(v.length-1),p+(1-(x-mn)/(mx-mn))*(h-2*p)];}),up=v[v.length-1]>=v[0],col=up?"#3FD47E":"#E8B339";
+ return '<svg class="spk" viewBox="0 0 '+w+' '+h+'"><polyline fill="none" stroke="'+col+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="'+
+  pt.map(function(q){return q[0].toFixed(1)+","+q[1].toFixed(1);}).join(" ")+'"/><circle cx="'+pt[pt.length-1][0].toFixed(1)+'" cy="'+pt[pt.length-1][1].toFixed(1)+'" r="2.3" fill="'+col+'"/></svg>';}
+function vCfg(){
+ var s='<div class="note" style="margin:0 0 14px"><b>Ändra fritt.</b> Set och reps ställs in per dag. Ändrar du antal set dyker fler rader upp i loggen direkt.</div>';
+ PROGRAM.forEach(function(d,i){
+  s+='<div class="sect">Dag '+(i+1)+' · '+esc(d.namn)+'</div><div class="card"><table><tr><th>Övning</th><th style="width:50px;text-align:center">Set</th><th style="width:50px;text-align:center">Från</th><th style="width:50px;text-align:center">Till</th></tr>';
+  d.ex.forEach(function(e){var c=dagCfg(d.id,e.id);
+   s+='<tr><td><input class="ti" type="text" data-nm="'+e.id+'" value="'+esc(nm(e.id,e.namn))+'"></td>'+
+      '<td style="text-align:center"><input class="si" type="number" min="1" max="8" data-cf="'+d.id+'|'+e.id+'|set" value="'+c.set+'"></td>'+
+      '<td style="text-align:center"><input class="si" type="number" min="1" max="30" data-cf="'+d.id+'|'+e.id+'|lo" value="'+c.lo+'"></td>'+
+      '<td style="text-align:center"><input class="si" type="number" min="1" max="40" data-cf="'+d.id+'|'+e.id+'|hi" value="'+c.hi+'"></td></tr>';});
+  s+='</table></div>';});
+ return s;
+}
+function vData(){
+ var n=0;PROGRAM.forEach(function(d){d.ex.forEach(function(e){if(allaFor(e.id).length)n++;});});
+ return '<div class="grid" style="grid-template-columns:1fr 1fr"><div class="kpi"><div class="l">Loggade pass</div><div class="v">'+db.pass.length+'</div></div>'+
+  '<div class="kpi"><div class="l">Med data</div><div class="v">'+n+'</div></div></div>'+
+  '<div class="sect">Säkerhetskopia</div><div class="card"><div class="h2">Exportera</div><p class="hs">Allt ligger i webbläsaren på den här enheten. Exportera varje vecka.</p>'+
+  '<div class="row" style="margin-top:13px"><button class="btn" id="exp">Exportera</button><button class="btn g" id="imp">Importera</button><input type="file" id="fin" accept="application/json,.json" style="display:none"></div></div>'+
+  '<div class="sect">Lägg till på hemskärmen</div><div class="card"><p class="hs" style="margin:0"><b style="color:var(--tx)">iPhone:</b> kräver en webbadress. Lägg filen på GitHub Pages, öppna i Safari → Dela → Lägg till på hemskärmen.<br><br><b style="color:var(--tx)">Mac:</b> öppna i Safari → Arkiv → Lägg till i Dock. Flytta inte filen efteråt.</p></div>'+
+  '<div class="sect">Farligt</div><div class="card"><div class="h2">Nollställ</div><p class="hs">Raderar alla pass och inställningar.</p><div class="row" style="margin-top:13px"><button class="btn d" id="wipe">Radera allt</button></div></div>';
+}
+function bind(){
+ document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){
+  view=b.dataset.v;document.querySelectorAll("nav button").forEach(function(x){x.className=x===b?"on":"";});render();};});
+ document.querySelectorAll("[data-dag]").forEach(function(b){b.onclick=function(){vald=b.dataset.dag;ut={};render();};});
+ document.querySelectorAll("input[data-ex]").forEach(function(el){
+  el.oninput=function(){
+   var id=el.dataset.ex,i=+el.dataset.i,f=el.dataset.f,c=dagCfg(vald,id),o=U(id,c.set);
+   o.sets[i][f]=el.value===""?null:+el.value;
+   if(f==="kg"&&i===0&&el.value!==""){
+    for(var j=1;j<c.set;j++){ if(o.sets[j].kg==null){ o.sets[j].kg=+el.value;
+     var n=document.querySelector('input[data-ex="'+id+'"][data-i="'+j+'"][data-f="kg"]'); if(n&&n!==document.activeElement)n.value=el.value; } } }
+   omrakna();};});
+ var sp=document.getElementById("spara");
+ if(sp)sp.onclick=function(){
+  var d=dag(vald),ex={},any=false;
+  d.ex.forEach(function(e){var c=dagCfg(d.id,e.id),o=ut[e.id];if(!o)return;
+   var sets=o.sets.slice(0,c.set).map(function(s){return(s&&s.kg!=null&&s.reps!=null)?{kg:s.kg,reps:s.reps}:null;});
+   if(sets.some(function(s){return s;})){ex[e.id]={sets:sets};any=true;}});
+  if(!any){toast("Fyll i minst ett set");return;}
+  var dt=iso(new Date());
+  db.pass=db.pass.filter(function(p){return !(p.dag===vald&&p.datum===dt);});
+  db.pass.push({dag:vald,datum:dt,ex:ex});save();ut={};
+  var i=PROGRAM.map(function(x){return x.id;}).indexOf(vald);vald=PROGRAM[(i+1)%5].id;
+  toast("Sparat · nästa "+dag(vald).kort);render();window.scrollTo({top:0,behavior:"smooth"});};
+ var rn=document.getElementById("rensa");if(rn)rn.onclick=function(){ut={};render();};
+ document.querySelectorAll("[data-del]").forEach(function(b){b.onclick=function(){var p=b.dataset.del.split("|");
+  if(confirm("Radera passet "+p[0]+"?")){db.pass=db.pass.filter(function(x){return !(x.datum===p[0]&&x.dag===p[1]);});save();toast("Raderat");render();}};});
+ document.querySelectorAll("[data-cf]").forEach(function(el){el.onchange=function(){
+  var p=el.dataset.cf.split("|"),k=p[0]+"."+p[1],c=dagCfg(p[0],p[1]);
+  db.cfg[k]={set:c.set,lo:c.lo,hi:c.hi};db.cfg[k][p[2]]=Math.max(1,+el.value||1);save();render();};});
+ document.querySelectorAll("[data-nm]").forEach(function(el){el.onchange=function(){
+  var v=el.value.trim();if(v)db.namn[el.dataset.nm]=v;else delete db.namn[el.dataset.nm];save();toast("Sparat");render();};});
+ var ex=document.getElementById("exp");
+ if(ex)ex.onclick=function(){var b=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download="overkropp-"+iso(new Date())+".json";a.click();setTimeout(function(){URL.revokeObjectURL(a.href);},1000);};
+ var im=document.getElementById("imp"),fin=document.getElementById("fin");
+ if(im)im.onclick=function(){fin.click();};
+ if(fin)fin.onchange=function(){var f=fin.files[0];if(!f)return;var r=new FileReader();
+  r.onload=function(){try{var o=JSON.parse(r.result);if(o.pass)db.pass=o.pass;if(o.cfg)db.cfg=o.cfg;if(o.namn)db.namn=o.namn;
+   save();toast("Importerat");render();}catch(e){alert("Kunde inte läsa filen.");}};r.readAsText(f);};
+ var wp=document.getElementById("wipe");
+ if(wp)wp.onclick=function(){if(confirm("Radera alla pass och inställningar?")){db={pass:[],cfg:{},namn:{}};save();toast("Nollställt");render();}};
+}
+render();
+</script>
+</body>
+</html>
